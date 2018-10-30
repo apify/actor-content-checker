@@ -1,9 +1,9 @@
 {
     "dependencies": {
-		    "apify": "^0.8.0",
-		    "diff": "*"
+	"apify": "^0.8.0",
+	"diff": "*"
     },
     "scripts": {
-        "start": "node src/main.js"
+        "start": "node main.js"
     }
 }
