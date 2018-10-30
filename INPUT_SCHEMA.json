@@ -31,6 +31,6 @@
             "description": "Email address where you want to get notification",
             "editor": "textfield",
             "prefill": "info@apify.com"
-        },
+        }
     }
 }
