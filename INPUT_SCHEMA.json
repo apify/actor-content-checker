@@ -1,0 +1,36 @@
+{
+    "title": "Content checker input",
+    "type": "object",
+    "schemaVersion": 1,
+    "required": ["url", "contentSelector", "sendNotificationTo"],
+    "properties": {
+        "url": {
+            "title": "URL to check",
+            "type": "string",
+            "description": "URL of a web page to be monitored",
+            "editor": "textfield",
+            "prefill": "https://www.apify.com/pricing"
+        },
+        "contentSelector": {
+            "title": "Monitored area selector",
+            "type": "string",
+            "description": "CSS selector of an area you want to monitore",
+            "editor": "textfield",
+            "prefill": ".change-log ul:nth-of-type(1)"
+        },
+        "screenshotSelector": {
+            "title": "Screenshot selector",
+            "type": "string",
+            "description": "CSS selector of a screenshot you want to get",
+            "editor": "textfield",
+            "prefill": ".change-log ul:nth-of-type(1)"
+        },
+        "sendNotificationTo": {
+            "title": "Email address",
+            "type": "string",
+            "description": "Email address where you want to get notification",
+            "editor": "textfield",
+            "prefill": "info@apify.com"
+        },
+    }
+}
