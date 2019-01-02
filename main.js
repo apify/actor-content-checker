@@ -1,5 +1,4 @@
 const Apify = require('apify');
-const JsDiff = require('diff');
 
 // returns screenshot of a given element
 async function screenshotDOMElement(page, selector, padding = 0) {
@@ -21,11 +20,16 @@ async function screenshotDOMElement(page, selector, padding = 0) {
 
 Apify.main(async () => {
     const input = await Apify.getValue('INPUT');
+    //console.log('ID: ' + APIFY_ACT_ID);
+    // use or create a named key-value store (using actor ID or task ID)
     const store = await Apify.openKeyValueStore('content-checker-store');
     
-    if (!input || !input.url || !input.contentSelector || !input.screenshotSelector || !input.sendNotificationTo) 
+    if (!input || !input.url || !input.contentSelector || !input.sendNotificationTo) 
     throw new Error('Invalid input, must be a JSON object with the ' + 
         '"url", "contentSelector", "screenshotSelector" and "sendNotificationTo" field!');
+
+    // if screenshotSelector is not defined, use contentSelector for screenshot
+    if (!input.screenshotSelector) input.screenshotSelector = input.contentSelector;
     
     const previousScreenshot = await store.getValue('currentScreenshot.png');
     const previousData = await store.getValue('currentData');
@@ -35,7 +39,7 @@ Apify.main(async () => {
     
     console.log(`Opening URL: ${input.url}`);  
     const page = await browser.newPage();
-    await page.setViewport({ width: 1200, height: 800 });
+    await page.setViewport({ width: 1920, height: 1080 });
     await page.goto(input.url, {waitUntil: 'networkidle2'});
 
     console.log(`Sleeping 5s ...`);
@@ -43,12 +47,23 @@ Apify.main(async () => {
     
     // Store a screenshot
     console.log('Saving screenshot...');
-    const screenshotBuffer = await screenshotDOMElement(page, input.screenshotSelector, 16);
+    let screenshotBuffer = null;
+    try {
+        screenshotBuffer = await screenshotDOMElement(page, input.screenshotSelector, 10);
+    } catch(e) {
+        throw new Error('Cannot get screenshot (screenshot selector is probably wrong)'); 
+    }
     await store.setValue('currentScreenshot.png', screenshotBuffer, { contentType: 'image/png' });
     
     // Store data
-    const content = await page.$eval(input.contentSelector, el => el.textContent);
-    
+    console.log('Saving data...');
+    let content = null;
+    try {
+        content = await page.$eval(input.contentSelector, el => el.textContent);
+    } catch(e) {
+        throw new Error('Cannot get content (content selector is probably wrong)'); 
+    }
+
     console.log('Previous data: ' + previousData);
     console.log('Current data: ' + content);
     await store.setValue('currentData', content);
@@ -70,18 +85,15 @@ Apify.main(async () => {
             console.log('No change');    
         } else {
             console.log('Content changed');
-            const diff = JsDiff.diffWords(previousData, content)
-            console.log(diff);
             
             //send mail
             console.log('Sending mail...');
             await Apify.call('apify/send-mail', {
                 to: input.sendNotificationTo,
                 subject: 'Apify content checker - page changed!',
-                text: `Page content for ${input.url} has changed
-                    previous data: ${previousData}
-                    current data: ${content}
-                    diff: ${JSON.stringify(diff, null, 2)}`,
+                text: 'URL: ' + input.url + '\n' +
+                    'Previous data: ' + previousData + '\n' +
+                    'Current data: ' + content + '\n',
                 
                 attachments: [
                     {
