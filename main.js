@@ -20,10 +20,16 @@ async function screenshotDOMElement(page, selector, padding = 0) {
 
 Apify.main(async () => {
     const input = await Apify.getValue('INPUT');
-    //console.log('ID: ' + APIFY_ACT_ID);
-    // use or create a named key-value store (using actor ID or task ID)
-    const store = await Apify.openKeyValueStore('content-checker-store');
     
+    // define name for a key-value store based on task ID or actor ID 
+    // (to be able to have more content checkers under one Apify account)
+    let storeName = "content-checker-store-";
+    storeName += !process.env.APIFY_ACTOR_TASK_ID ? process.env.APIFY_ACT_ID : process.env.APIFY_ACTOR_TASK_ID;
+
+    // use or create a named key-value store
+    const store = await Apify.openKeyValueStore(storeName);
+    
+    // check inputs
     if (!input || !input.url || !input.contentSelector || !input.sendNotificationTo) 
     throw new Error('Invalid input, must be a JSON object with the ' + 
         '"url", "contentSelector", "screenshotSelector" and "sendNotificationTo" field!');
@@ -31,9 +37,11 @@ Apify.main(async () => {
     // if screenshotSelector is not defined, use contentSelector for screenshot
     if (!input.screenshotSelector) input.screenshotSelector = input.contentSelector;
     
+    // get data from previous run
     const previousScreenshot = await store.getValue('currentScreenshot.png');
     const previousData = await store.getValue('currentData');
     
+    // open page in a browser
     console.log('Launching Puppeteer...');
     const browser = await Apify.launchPuppeteer();
     
@@ -42,6 +50,7 @@ Apify.main(async () => {
     await page.setViewport({ width: 1920, height: 1080 });
     await page.goto(input.url, {waitUntil: 'networkidle2'});
 
+    // wait 5 seconds (if there is some dynamic content)
     console.log(`Sleeping 5s ...`);
     await new Promise((resolve) => setTimeout(resolve, 5000));
     
@@ -77,6 +86,7 @@ Apify.main(async () => {
         console.log('Running for the first time, no check');
     } else {
         
+        // store data from this run
         await store.setValue('previousScreenshot.png', previousScreenshot, { contentType: 'image/png' });
         await store.setValue('previousData', previousData); 
     
