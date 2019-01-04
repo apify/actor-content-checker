@@ -14,8 +14,6 @@ Actor needs an URL, content selector and email address. Screenshot selector can 
 | screenshotSelector | String | Screenshot selector | .col-full.block-lg .flex | no
 | sendNotificationTo | String | Email address | info@apify.com | yes
 
-For more information about `waitUntil` parameter please take a look at documentation of [Puppeteers page.goto function](https://github.com/GoogleChrome/puppeteer/blob/v1.10.0/docs/api.md#pagegotourl-options).
-
 ## OUTPUT
 
 Once the actor finishes, it will update a content and screenshot in a named Key-Value store associated with the actor / task.
