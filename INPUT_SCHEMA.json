@@ -31,6 +31,13 @@
             "description": "Email address where you want to get notification",
             "editor": "textfield",
             "prefill": "info@apify.com"
+        },
+        "sendNotificationText": {
+            "title": "Notification Text",
+            "type": "string",
+            "description": "Optional text to include in the email notification.",
+            "editor": "textfield",
+            "prefill": "Instructions for triggering an update to our database"
         }
     }
 }

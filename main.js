@@ -98,10 +98,15 @@ Apify.main(async () => {
             
             //send mail
             console.log('Sending mail...');
+            let noteText = ''
+            if (input.sendNotificationText) {
+                noteText = 'Note: ' + input.sendNotificationText + '\n';
+            }
             await Apify.call('apify/send-mail', {
                 to: input.sendNotificationTo,
                 subject: 'Apify content checker - page changed!',
                 text: 'URL: ' + input.url + '\n' +
+                    noteText +
                     'Previous data: ' + previousData + '\n' +
                     'Current data: ' + content + '\n',
                 

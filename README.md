@@ -13,6 +13,7 @@ Actor needs an URL, content selector and email address. Screenshot selector can 
 | contentSelector | String | Monitored area selector | .mb2-lg .flex | yes
 | screenshotSelector | String | Screenshot selector | .col-full.block-lg .flex | no
 | sendNotificationTo | String | Email address | info@apify.com | yes
+| sendNotificationText | String | Notification Text | Follow instructions in company wiki for updating the database | no
 
 ## OUTPUT
 
