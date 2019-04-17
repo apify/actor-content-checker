@@ -14,7 +14,7 @@
         "contentSelector": {
             "title": "Monitored area selector",
             "type": "string",
-            "description": "CSS selector of an area you want to monitore",
+            "description": "CSS selector of an area you want to monitor",
             "editor": "textfield",
             "prefill": ".change-log ul:nth-of-type(1)"
         },
