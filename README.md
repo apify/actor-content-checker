@@ -3,6 +3,8 @@ This actor monitors a page's content and sends a notification when content chang
 
 Technically it extracts text by given selector and compares it with the previous run. If there is any change, it runs another actor to send an email notification. It also saves and sends screenshots.
 
+[Here](https://blog.apify.com/how-to-set-up-a-content-change-watchdog-for-any-website-in-5-minutes-460843b12271) is a blog post about this actor with a step-by-step tutorial how to set it up.
+
 ## INPUT
 
 Actor needs an URL, content selector and email address. Screenshot selector can also be defined, otherwise content selector is used for screenshot.
