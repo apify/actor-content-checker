@@ -1,13 +1,23 @@
-# Actor - content checker
-This actor monitors a page's content and sends a notification when content changes.
+# Content Checker
 
-Technically it extracts text by given selector and compares it with the previous run. If there is any change, it runs another actor to send an email notification. It also saves and sends screenshots.
+- [Features](#Features)
+- [Tutorial](#Tutorial)
+- [Input](#Input)
+- [Output](#Output)
 
-[Here](https://blog.apify.com/how-to-set-up-a-content-change-watchdog-for-any-website-in-5-minutes-460843b12271) is a blog post about this actor with a step-by-step tutorial how to set it up.
 
-## INPUT
+## Features
 
-Actor needs an URL, content selector and email address. Screenshot selector can also be defined, otherwise content selector is used for screenshot.
+This actor enables you to monitor content on any web page and sends an email notification with before and after screenshots whenever any content changes. You can use this to create your own watchdog for prices, product updates, sales, competitors, or any content that you want to keep an eye on.
+
+Technically, it extracts text by selector and compares it with the previous run. If there is any change, it runs another actor to send an email notification, save, and send screenshots.
+
+## Tutorial
+Read this (https://blog.apify.com/how-to-set-up-a-content-change-watchdog-for-any-website-in-5-minutes-460843b12271) blog post for more ideas and a step-by-step tutorial on how to set it up.
+
+## Input
+
+The actor needs a URL, content selector, and email address. A screenshot selector can also be defined or, if not defined, the content selector is used for the screenshot.
 
 | Field | Type | Description | Example | Mandatory
 | ----- | ---- | ----------- | ------- | ---------
@@ -16,12 +26,13 @@ Actor needs an URL, content selector and email address. Screenshot selector can 
 | screenshotSelector | String | Screenshot selector | .col-full.block-lg .flex | no
 | sendNotificationTo | String | Email address | info@apify.com | yes
 
-## OUTPUT
+## Output
 
-Once the actor finishes, it will update a content and screenshot in a named Key-Value store associated with the actor / task.
+Once the actor finishes, it will update content and screenshot in a named key-value store associated with the actor/task.
 
 If the content changed, another actor is called to send an email notification.
 
-Here's an example of an email notification with previous data, current data and 2 screenshots:
-
+Here's an example of an email notification with previous data, changed data, and two screenshots:
 <img src="https://apify-uploads-prod.s3.amazonaws.com/XMuiubsWzSFbcQEhs-Screen_Shot_2019-01-02_at_23.23.51.png" style="max-width: 100%" />
+
+
