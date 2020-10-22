@@ -102,6 +102,7 @@ Apify.main(async () => {
                 to: input.sendNotificationTo,
                 subject: 'Apify content checker - page changed!',
                 text: `URL: ${input.url}\n`
+                    + input.sendNotificationText ? `Note: ${input.sendNotificationText}\n` : ''
                     + `Previous data: ${previousData}\n`
                     + `Current data: ${content}\n`,
 
