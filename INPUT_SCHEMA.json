@@ -16,19 +16,19 @@
             "type": "string",
             "description": "CSS selector of an area you want to monitor",
             "editor": "textfield",
-            "prefill": ".change-log ul:nth-of-type(1)"
+            "prefill": ".jfTIjc p:nth-of-type(1)"
         },
         "screenshotSelector": {
             "title": "Screenshot selector",
             "type": "string",
             "description": "CSS selector of a screenshot you want to get",
             "editor": "textfield",
-            "prefill": ".change-log ul:nth-of-type(1)"
+            "prefill": ".jfTIjc p:nth-of-type(1)"
         },
         "sendNotificationTo": {
             "title": "Email address",
             "type": "string",
-            "description": "Email address where you want to get notification",
+            "description": "Email address where you want to get the notification",
             "editor": "textfield",
             "prefill": "info@apify.com"
         }
