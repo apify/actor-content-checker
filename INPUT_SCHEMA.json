@@ -16,14 +16,14 @@
             "type": "string",
             "description": "CSS selector of an area you want to monitor",
             "editor": "textfield",
-            "prefill": ".jfTIjc p:nth-of-type(1)"
+            "prefill": "[class^=change-log__MonthBox-]:nth-of-type(1) ul"
         },
         "screenshotSelector": {
             "title": "Screenshot selector",
             "type": "string",
             "description": "CSS selector of a screenshot you want to get",
             "editor": "textfield",
-            "prefill": ".jfTIjc p:nth-of-type(1)"
+            "prefill": "[class^=change-log__MonthBox-]:nth-of-type(1) ul"
         },
         "sendNotificationTo": {
             "title": "Email address",
