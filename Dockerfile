@@ -1,7 +1,7 @@
 FROM apify/actor-node-chrome
 
 # Copy source code
-COPY * ./
+COPY . ./
 
 # Install default dependencies, print versions of everything
 RUN npm --quiet set progress=false \
@@ -12,3 +12,5 @@ RUN npm --quiet set progress=false \
  && node --version \
  && echo "NPM version:" \
  && npm --version
+
+ENV APIFY_DISABLE_OUTDATED_WARNING 1
