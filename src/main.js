@@ -3,7 +3,7 @@ const Apify = require('apify');
 const screenshotDOMElement = require('./screenshot');
 const validateInput = require('./validate-input');
 
-const { log } = Apify.utils;
+const { log, sleep } = Apify.utils;
 
 Apify.main(async () => {
     const input = await Apify.getInput();
@@ -16,6 +16,7 @@ Apify.main(async () => {
         // if screenshotSelector is not defined, use contentSelector for screenshot
         screenshotSelector = contentSelector,
         sendNotificationText,
+        proxy,
     } = input;
 
     // define name for a key-value store based on task ID or actor ID
@@ -29,10 +30,13 @@ Apify.main(async () => {
     // get data from previous run
     const previousScreenshot = await store.getValue('currentScreenshot.png');
     const previousData = await store.getValue('currentData');
+    const proxyConfiguration = await Apify.createProxyConfiguration(proxy);
 
     // open page in a browser
     log.info('Launching Puppeteer...');
-    const browser = await Apify.launchPuppeteer();
+    const browser = await Apify.launchPuppeteer({
+        proxyUrl: proxyConfiguration ? proxyConfiguration.newUrl() : undefined,
+    });
 
     log.info(`Opening URL: ${url}`);
     const page = await browser.newPage();
@@ -41,7 +45,7 @@ Apify.main(async () => {
 
     // wait 5 seconds (if there is some dynamic content)
     log.info('Sleeping 5s ...');
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await sleep(5000);
 
     // Store a screenshot
     log.info('Saving screenshot...');

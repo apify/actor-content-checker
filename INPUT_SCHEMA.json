@@ -37,6 +37,12 @@
             "type": "string",
             "description": "Optional text to include in the email notification.",
             "editor": "textfield"
+        },
+        "proxy": {
+            "title": "Proxy Configuration",
+            "type": "object",
+            "description": "Select a proxy if the target website is blocking your access.",
+            "editor": "proxy"
         }
     }
 }
