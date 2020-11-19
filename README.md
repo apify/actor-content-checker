@@ -26,6 +26,8 @@ The actor needs a URL, content selector, and email address. A screenshot selecto
 | screenshotSelector | String | Screenshot selector | .col-full.block-lg .flex | no
 | sendNotificationTo | String | Email address | info@apify.com | yes
 | sendNotificationText | String | Notification Text | Follow instructions in company wiki for updating the database | no
+| proxy | Object | Proxy Configuration | `{ "useApifyProxy": true }` | no
+| navigationTimeout | Number | Navigation Timeout in milliseconds | 30000 | no
 
 ## Output
 
