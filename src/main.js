@@ -17,6 +17,7 @@ Apify.main(async () => {
         screenshotSelector = contentSelector,
         sendNotificationText,
         proxy,
+        navigationTimeout = 30000,
     } = input;
 
     // define name for a key-value store based on task ID or actor ID
@@ -41,9 +42,13 @@ Apify.main(async () => {
     log.info(`Opening URL: ${url}`);
     const page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
-    await page.goto(url, { waitUntil: 'networkidle2' });
+    await page.goto(url, {
+        waitUntil: 'networkidle2',
+        timeout: navigationTimeout,
+    });
 
     // wait 5 seconds (if there is some dynamic content)
+    // TODO: this should wait for the selector to be available
     log.info('Sleeping 5s ...');
     await sleep(5000);
 

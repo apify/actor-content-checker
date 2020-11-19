@@ -43,6 +43,14 @@
             "type": "object",
             "description": "Select a proxy if the target website is blocking your access.",
             "editor": "proxy"
+        },
+        "navigationTimeout": {
+            "title": "Navigation Timeout",
+            "description": "How long it should wait, in milliseconds, until the page times out",
+            "type": "integer",
+            "editor": "number",
+            "prefill": 30000,
+            "default": 30000
         }
     }
 }
