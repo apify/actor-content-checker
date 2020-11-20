@@ -41,6 +41,9 @@
         "proxy": {
             "title": "Proxy Configuration",
             "type": "object",
+            "default": {
+                "useApifyProxy": false
+            },
             "description": "Select a proxy if the target website is blocking your access.",
             "editor": "proxy"
         },

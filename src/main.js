@@ -16,7 +16,9 @@ Apify.main(async () => {
         // if screenshotSelector is not defined, use contentSelector for screenshot
         screenshotSelector = contentSelector,
         sendNotificationText,
-        proxy,
+        proxy = {
+            useApifyProxy: false
+        },
         navigationTimeout = 30000,
     } = input;
 
