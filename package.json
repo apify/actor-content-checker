@@ -1,6 +1,6 @@
 {
     "dependencies": {
-        "apify": "^0.21.8"
+        "apify": "^0.21.9"
     },
     "scripts": {
         "start": "node src/main.js"
