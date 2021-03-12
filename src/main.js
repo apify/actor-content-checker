@@ -13,14 +13,14 @@ const createSlackMessage = ({ url, previousData, content, store }) => {
                 type: 'section',
                 text: {
                     type: 'mrkdwn',
-                    text: `:loudspeaker: Apify content checker: page ${url} changed!`,
+                    text: `:loudspeaker: Apify content checker :loudspeaker:\n Page ${url} changed!`,
                 },
             },
             {
                 type: 'section',
                 text: {
                     type: 'mrkdwn',
-                    text: `*Previous data:* ${previousData}\n*Current data:* ${content}`,
+                    text: `*Previous data:* ${previousData}\n\n*Current data:* ${content}`,
                 },
             },
             {
@@ -41,7 +41,7 @@ const createSlackMessage = ({ url, previousData, content, store }) => {
                 elements: [
                     {
                         type: 'mrkdwn',
-                        text: 'Message was generated using Apify app. You can unsubscribe these messages from channel using `/apify list subscribe`.',
+                        text: ':question: Message was generated using Apify app. You can unsubscribe these messages from channel with "/apify list subscribe" command.',
                     },
                 ],
             },
