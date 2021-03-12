@@ -41,7 +41,7 @@ const createSlackMessage = ({ url, previousData, content, store }) => {
                 elements: [
                     {
                         type: 'mrkdwn',
-                        text: ':question: Message was generated using Apify app. You can unsubscribe these messages from channel with "/apify list subscribe" command.',
+                        text: ':question: The message was generated using Apify app. You can unsubscribe these messages from the channel with "/apify list subscribe" command.',
                     },
                 ],
             },
