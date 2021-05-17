@@ -5,6 +5,50 @@ const validateInput = require('./validate-input');
 
 const { log, sleep } = Apify.utils;
 
+const createSlackMessage = ({ url, previousData, content, store }) => {
+    return {
+        text: '',
+        blocks: [
+            {
+                type: 'section',
+                text: {
+                    type: 'mrkdwn',
+                    text: `:loudspeaker: Apify content checker :loudspeaker:\n Page ${url} changed!`,
+                },
+            },
+            {
+                type: 'section',
+                text: {
+                    type: 'mrkdwn',
+                    text: `*Previous data:* ${previousData}\n\n*Current data:* ${content}`,
+                },
+            },
+            {
+                type: 'image',
+                title: {
+                    type: 'plain_text',
+                    text: 'image1',
+                    emoji: true,
+                },
+                image_url: `https://api.apify.com/v2/key-value-stores/${store.storeId}/records/currentScreenshot.png`,
+                alt_text: 'image1',
+            },
+            {
+                type: 'divider',
+            },
+            {
+                type: 'context',
+                elements: [
+                    {
+                        type: 'mrkdwn',
+                        text: ':question: The message was generated using Apify app. You can unsubscribe these messages from the channel with "/apify list subscribe" command.',
+                    },
+                ],
+            },
+        ],
+    }
+};
+
 Apify.main(async () => {
     const input = await Apify.getInput();
     validateInput(input);
@@ -96,6 +140,10 @@ Apify.main(async () => {
             log.warning('Content changed');
 
             const notificationNote = sendNotificationText ? `Note: ${sendNotificationText}\n\n` : '';
+
+            // create slack message used by Apify slack integration
+            const message = createSlackMessage({ url, previousData, content, store });
+            await Apify.setValue('SLACK_MESSAGE', message);
 
             // send mail
             log.info('Sending mail...');
