@@ -1,6 +1,7 @@
 {
     "dependencies": {
-        "apify": "^0.21.9"
+        "apify": "^1.2.0",
+        "puppeteer": "*"
     },
     "scripts": {
         "start": "node src/main.js"
