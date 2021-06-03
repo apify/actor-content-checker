@@ -104,7 +104,11 @@ Apify.main(async () => {
     try {
         screenshotBuffer = await screenshotDOMElement(page, screenshotSelector, 10);
     } catch (e) {
-        throw new Error('Cannot get screenshot (screenshot selector is probably wrong)');
+        const fullPage = await page.screenshot({
+            fullPage: true,
+        })
+        await store.setValue('fullpageScreenshot.png', fullPage, { contentType: 'image/png' });
+        throw new Error(`Cannot get screenshot (screenshot selector is probably wrong).\n Made screenshot of the full page instead: \n https://api.apify.com/v2/key-value-stores/${store.id}/records/fullpageScreenshot.png`);
     }
     await store.setValue('currentScreenshot.png', screenshotBuffer, { contentType: 'image/png' });
 
@@ -165,13 +169,12 @@ Apify.main(async () => {
             });
         }
     }
-
     log.info('You can check the output in the named key-value store on the following URLs:');
-    log.info(`- https://api.apify.com/v2/key-value-stores/${store.storeId}/records/currentScreenshot.png`);
-    log.info(`- https://api.apify.com/v2/key-value-stores/${store.storeId}/records/currentData`);
+    log.info(`- https://api.apify.com/v2/key-value-stores/${store.id}/records/currentScreenshot.png`);
+    log.info(`- https://api.apify.com/v2/key-value-stores/${store.id}/records/currentData`);
 
     if (previousScreenshot !== null) {
-        log.info(`- https://api.apify.com/v2/key-value-stores/${store.storeId}/records/previousScreenshot.png`);
-        log.info(`- https://api.apify.com/v2/key-value-stores/${store.storeId}/records/previousData`);
+        log.info(`- https://api.apify.com/v2/key-value-stores/${store.id}/records/previousScreenshot.png`);
+        log.info(`- https://api.apify.com/v2/key-value-stores/${store.id}/records/previousData`);
     }
 });

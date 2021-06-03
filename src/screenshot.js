@@ -7,6 +7,7 @@ module.exports = async (page, selector, padding = 0) => {
     }, selector);
 
     return page.screenshot({
+        fullpage: true,
         clip: {
             x: rect.left - padding,
             y: rect.top - padding,
