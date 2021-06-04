@@ -30,7 +30,7 @@
             "type": "string",
             "description": "Email address where you want to get the notification",
             "editor": "textfield",
-            "prefill": "info@apify.com"
+            "example": "myemail@gmail.com"
         },
         "sendNotificationText": {
             "title": "Notification Text",
