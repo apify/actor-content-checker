@@ -1,8 +1,9 @@
 const Apify = require('apify');
-
+/*
 const screenshotDOMElement = require('./screenshot');
-const validateInput = require('./validate-input');
+const validateInput = require('./validate-input');*/
 
+const { screenshotDOMElement, sendMailOnError, validateInput } = require('./utils');
 const { log, sleep } = Apify.utils;
 
 const createSlackMessage = ({ url, previousData, content, store }) => {
@@ -104,11 +105,13 @@ Apify.main(async () => {
     try {
         screenshotBuffer = await screenshotDOMElement(page, screenshotSelector, 10);
     } catch (e) {
-        const fullPage = await page.screenshot({
-            fullPage: true,
-        })
-        await store.setValue('fullpageScreenshot.png', fullPage, { contentType: 'image/png' });
-        throw new Error(`Cannot get screenshot (screenshot selector is probably wrong).\n Made screenshot of the full page instead: \n https://api.apify.com/v2/key-value-stores/${store.id}/records/fullpageScreenshot.png`);
+        const errorMessage = `Cannot get screenshot (screenshot selector is probably wrong).\n Made screenshot of the full page instead: \n https://api.apify.com/v2/key-value-stores/${store.id}/records/fullpageScreenshot.png`;
+        // MAKING AND SAVING FULL PAGE SCREENSHOT
+        const fullPageScreenshot = await page.screenshot({ fullPage: true })
+        await store.setValue('fullpageScreenshot.png', fullPageScreenshot, { contentType: 'image/png' });
+        // SENDING EMAIL WITH THE INFO ABOUT ERROR AND FULL PAGE SCREENSHOT
+        await sendMailOnError(sendNotificationTo, url, fullPageScreenshot, errorMessage)
+        throw new Error(errorMessage);
     }
     await store.setValue('currentScreenshot.png', screenshotBuffer, { contentType: 'image/png' });
 
@@ -118,7 +121,13 @@ Apify.main(async () => {
     try {
         content = await page.$eval(contentSelector, (el) => el.textContent);
     } catch (e) {
-        throw new Error('Cannot get content (content selector is probably wrong)');
+        const errorMessage = `Cannot get content (content selector is probably wrong). \n Made screenshot of the full page instead: \n https://api.apify.com/v2/key-value-stores/${store.id}/records/fullpageScreenshot.png`;
+        // MAKING AND SAVING FULL PAGE SCREENSHOT
+        const fullPageScreenshot = await page.screenshot({ fullPage: true })
+        await store.setValue('fullpageScreenshot.png', fullPageScreenshot, { contentType: 'image/png' });
+        // SENDING EMAIL WITH THE INFO ABOUT ERROR AND FULL PAGE SCREENSHOT
+        await sendMailOnError(sendNotificationTo, url, fullPageScreenshot, errorMessage)
+        throw new Error(errorMessage);
     }
 
     log.info(`Previous data: ${previousData}`);
