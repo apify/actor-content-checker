@@ -1,7 +1,4 @@
 const Apify = require('apify');
-/*
-const screenshotDOMElement = require('./screenshot');
-const validateInput = require('./validate-input');*/
 
 const { screenshotDOMElement, sendMailOnError, validateInput } = require('./utils');
 const { log, sleep } = Apify.utils;
@@ -65,6 +62,7 @@ Apify.main(async () => {
             useApifyProxy: false
         },
         navigationTimeout = 30000,
+        informOnError,
     } = input;
 
     // define name for a key-value store based on task ID or actor ID
@@ -110,7 +108,7 @@ Apify.main(async () => {
         const fullPageScreenshot = await page.screenshot({ fullPage: true })
         await store.setValue('fullpageScreenshot.png', fullPageScreenshot, { contentType: 'image/png' });
         // SENDING EMAIL WITH THE INFO ABOUT ERROR AND FULL PAGE SCREENSHOT
-        await sendMailOnError(sendNotificationTo, url, fullPageScreenshot, errorMessage)
+        if (informOnError === 'true') await sendMailOnError(sendNotificationTo, url, fullPageScreenshot, errorMessage)
         throw new Error(errorMessage);
     }
     await store.setValue('currentScreenshot.png', screenshotBuffer, { contentType: 'image/png' });
@@ -126,7 +124,7 @@ Apify.main(async () => {
         const fullPageScreenshot = await page.screenshot({ fullPage: true })
         await store.setValue('fullpageScreenshot.png', fullPageScreenshot, { contentType: 'image/png' });
         // SENDING EMAIL WITH THE INFO ABOUT ERROR AND FULL PAGE SCREENSHOT
-        await sendMailOnError(sendNotificationTo, url, fullPageScreenshot, errorMessage)
+        if (informOnError === 'true') await sendMailOnError(sendNotificationTo, url, fullPageScreenshot, errorMessage)
         throw new Error(errorMessage);
     }
 
