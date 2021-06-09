@@ -1,0 +1,6 @@
+{
+    "extends": "@apify",
+    "rules": {
+        "no-throw-literal": "off"
+    }
+  }

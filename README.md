@@ -20,15 +20,7 @@ Read this (https://blog.apify.com/how-to-set-up-a-content-change-watchdog-for-an
 
 The actor needs a URL, content selector, and an email address. A screenshot selector can also be defined or, if not defined, the content selector is used for the screenshot.
 
-| Field | Type | Description | Example | Mandatory
-| ----- | ---- | ----------- | ------- | ---------
-| url | String | URL to check | https://www.kickstarter.com/projects/solgaarddesign/carry-on-closet-solgaard-suitcase-shelf-and-usb | yes
-| contentSelector | String | Monitored area selector | .mb2-lg .flex | yes
-| screenshotSelector | String | Screenshot selector | .col-full.block-lg .flex | no
-| sendNotificationTo | String | Email address | info@apify.com | yes
-| sendNotificationText | String | Notification Text | Follow instructions in company wiki for updating the database | no
-| proxy | Object | Proxy Configuration | `{ "useApifyProxy": true }` | no
-| navigationTimeout | Number | Navigation Timeout in milliseconds | 30000 | no
+For detailed input description please see the [Input page](https://apify.com/jakubbalada/content-checker).
 
 ## Output
 

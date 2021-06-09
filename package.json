@@ -5,5 +5,9 @@
     },
     "scripts": {
         "start": "node src/main.js"
+    },
+    "devDependencies": {
+        "@apify/eslint-config": "^0.1.4",
+        "eslint": "^7.28.0"
     }
 }

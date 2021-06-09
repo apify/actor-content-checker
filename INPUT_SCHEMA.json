@@ -60,9 +60,25 @@
             "title": "Navigation Timeout",
             "description": "How long it should wait, in milliseconds, until the page times out",
             "type": "integer",
-            "editor": "number",
             "prefill": 30000,
-            "default": 30000
+            "default": 30000,
+            "unit": "ms"
+        },
+        "retryStrategy": {
+            "title": "How to retry",
+            "type": "string",
+            "description": "Sometimes the page doesn't load properly or the actor gets blocked so retrying those helps. On the other hand retrying wrong selector doesn't help. The recognition of blocked pages is not perfect (about 80%).",
+            "editor": "select",
+            "default": "on-block",
+            "enum": ["on-block", "on-all-errors", "never-retry"],
+            "enumTitles": ["When being blocked", "For all errors", "Never"]
+        },
+        "maxRetries": {
+            "title": "Navigation Timeout",
+            "description": "How long it should wait, in milliseconds, until the page times out",
+            "type": "integer",
+            "default": 5,
+            "unit": "retries"
         }
     }
 }

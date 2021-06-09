@@ -1,6 +1,6 @@
 const Apify = require('apify');
-const { log } = Apify.utils;
 
+const { log } = Apify.utils;
 
 // 1.
 async function sendMailOnError(sendNotificationTo, url, fullPageScreenshot, errorMessage) {
@@ -27,7 +27,7 @@ async function screenshotDOMElement(page, selector, padding = 0) {
         return { left: x, top: y, width, height, id: element.id };
     }, selector);
 
-    return await page.screenshot({
+    return page.screenshot({
         clip: {
             x: rect.left - padding,
             y: rect.top - padding,
@@ -47,3 +47,47 @@ function validateInput(input) {
 }
 
 module.exports = { screenshotDOMElement, sendMailOnError, validateInput };
+
+module.exports.createSlackMessage = ({ url, previousData, content, store }) => {
+    return {
+        text: '',
+        blocks: [
+            {
+                type: 'section',
+                text: {
+                    type: 'mrkdwn',
+                    text: `:loudspeaker: Apify content checker :loudspeaker:\n Page ${url} changed!`,
+                },
+            },
+            {
+                type: 'section',
+                text: {
+                    type: 'mrkdwn',
+                    text: `*Previous data:* ${previousData}\n\n*Current data:* ${content}`,
+                },
+            },
+            {
+                type: 'image',
+                title: {
+                    type: 'plain_text',
+                    text: 'image1',
+                    emoji: true,
+                },
+                image_url: `https://api.apify.com/v2/key-value-stores/${store.storeId}/records/currentScreenshot.png`,
+                alt_text: 'image1',
+            },
+            {
+                type: 'divider',
+            },
+            {
+                type: 'context',
+                elements: [
+                    {
+                        type: 'mrkdwn',
+                        text: ':question: The message was generated using Apify app. You can unsubscribe these messages from the channel with "/apify list subscribe" command.',
+                    },
+                ],
+            },
+        ],
+    };
+};
