@@ -1,3 +1,7 @@
+## 2021-06-09
+*Features*
+- Added "smart" retrying logic when being blocked
+- Added `maxRetries` and `retryStrategy` to the input
 
 ## 2021-06-04
 *Fixes*

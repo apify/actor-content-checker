@@ -5,6 +5,7 @@
 - [Tutorial](#tutorial)
 - [Input](#input)
 - [Output](#output)
+- [Changelog](#changelog)
 <!-- toc end -->
 
 ## Features
@@ -31,4 +32,6 @@ If the content changed, another actor is called to send an email notification.
 Here's an example of an email notification with previous data, changed data, and two screenshots:
 <img src="https://apify-uploads-prod.s3.amazonaws.com/XMuiubsWzSFbcQEhs-Screen_Shot_2019-01-02_at_23.23.51.png" style="max-width: 100%" />
 
+## Changelog
 
+Keep up with recent fixes and new features by reading the [Changelog](https://github.com/apify/actor-content-checker/blob/master/CHANGELOG.md).
