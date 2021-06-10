@@ -1,3 +1,7 @@
+const Apify = require('apify');
+
+const { log } = Apify.utils;
+
 const distilCaptcha = async (page) => {
     return page.evaluate(() => {
         return $('#distilCaptchaForm').length > 0 || $('[action*="distil_r_captcha.html"]').length > 0;
@@ -11,9 +15,22 @@ const accessDenied = async (page) => {
 };
 
 const recaptcha = async (page) => {
-    return page.evaluate(() => {
-        return $('#recaptcha').length > 0 || $('iframe[src*="/recaptcha/"]').length > 0;
+    const { blocked, isCaptchaDisabled } = await page.evaluate(() => {
+        const backGroundCaptchaEl = $('iframe[src*="/recaptcha/"]');
+        const isCaptchaDisabled = backGroundCaptchaEl.attr('style')
+            && backGroundCaptchaEl.attr('style').includes('display: none');
+        const isCaptchaActive = backGroundCaptchaEl.length > 0 && !isCaptchaDisabled;
+        return {
+            blocked: $('#recaptcha').length > 0 || isCaptchaActive,
+            isCaptchaDisabled,
+        };
     });
+
+    if (isCaptchaDisabled) {
+        log.warning(`Captcha is on the page but it is not activated`);
+    }
+
+    return blocked;
 };
 
 module.exports.testForBlocks = async (page) => {

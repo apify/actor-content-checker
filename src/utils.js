@@ -2,25 +2,25 @@ const Apify = require('apify');
 
 const { log } = Apify.utils;
 
-// 1.
-async function sendMailOnError(sendNotificationTo, url, fullPageScreenshot, errorMessage) {
+const sendMailOnError = async (sendNotificationTo, url, fullPageScreenshot, errorMessage) => {
     log.info('Sending mail with the info about Error on the page...');
     await Apify.call('apify/send-mail', {
         to: sendNotificationTo,
         subject: 'Apify content checker - Error!',
         text: `URL: ${url}\n ${errorMessage}`,
-        attachments: [
-            {
-                filename: 'fullpageScreenshot.png',
-                data: fullPageScreenshot.toString('base64'),
-            },
-        ],
+        attachments: fullPageScreenshot
+            ? [
+                {
+                    filename: 'fullpageScreenshot.png',
+                    data: fullPageScreenshot.toString('base64'),
+                },
+            ]
+            : undefined,
 
     });
-}
+};
 
-// 2.
-async function screenshotDOMElement(page, selector, padding = 0) {
+module.exports.screenshotDOMElement = async (page, selector, padding = 0) => {
     const rect = await page.evaluate((sel) => {
         const element = document.querySelector(sel);
         const { x, y, width, height } = element.getBoundingClientRect();
@@ -35,18 +35,33 @@ async function screenshotDOMElement(page, selector, padding = 0) {
             height: rect.height + padding * 2,
         },
     });
-}
+};
 
-// 3.
-function validateInput(input) {
+module.exports.validateInput = (input) => {
     // check inputs
     if (!input || !input.url || !input.contentSelector || !input.sendNotificationTo) {
         throw new Error('Invalid input, must be a JSON object with the '
             + '"url", "contentSelector", "screenshotSelector" and "sendNotificationTo" field!');
     }
-}
+};
 
-module.exports = { screenshotDOMElement, sendMailOnError, validateInput };
+module.exports.handleFailedAndThrow = async ({ type, fullPageScreenshot, informOnError, sendNotificationTo, url }) => {
+    let errorMessage = `Cannot get ${type} (${type} selector is probably wrong).`;
+    if (fullPageScreenshot) {
+        await Apify.setValue('fullpageScreenshot.png', fullPageScreenshot, { contentType: 'image/png' });
+        // SENDING EMAIL WITH THE INFO ABOUT ERROR AND FULL PAGE SCREENSHOT
+        const storeId = Apify.getEnv().defaultKeyValueStoreId;
+        errorMessage = `${errorMessage}`
+            + `\nMade screenshot of the full page instead: `
+            + `\nhttps://api.apify.com/v2/key-value-stores/${storeId}/records/fullpageScreenshot.png`;
+    }
+    if (informOnError === 'true') {
+        await sendMailOnError(sendNotificationTo, url, fullPageScreenshot, errorMessage);
+    }
+
+    // We use simple string throw deliberately so users are not bothered with stack traces
+    throw errorMessage;
+};
 
 module.exports.createSlackMessage = ({ url, previousData, content, store }) => {
     return {

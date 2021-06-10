@@ -1,6 +1,6 @@
 const Apify = require('apify');
 
-const { screenshotDOMElement, sendMailOnError, validateInput, createSlackMessage } = require('./utils');
+const { handleFailedAndThrow, screenshotDOMElement, validateInput, createSlackMessage } = require('./utils');
 const { testForBlocks } = require('./check-captchas');
 
 const { log, sleep } = Apify.utils;
@@ -82,7 +82,12 @@ Apify.main(async () => {
                 log.warning('Could not inject JQuery so cannot test captcha presence');
             }
 
-            await testForBlocks(page);
+            try {
+                await testForBlocks(page);
+            } catch (e) {
+                fullPageScreenshot = await page.screenshot({ fullPage: true });
+                throw e;
+            }
 
             log.info('Saving screenshot...');
 
@@ -108,7 +113,7 @@ Apify.main(async () => {
             }
 
             if (errorHappened) {
-                fullPageScreenshot = await page.screenshot({ fullPage: true }); 
+                fullPageScreenshot = await page.screenshot({ fullPage: true });
                 if (retryStrategy === 'on-all-errors') {
                     const updatedMessage = `${errorMessage} Will retry...`;
                     throw updatedMessage;
@@ -123,34 +128,27 @@ Apify.main(async () => {
 
     // All retries to get screenshot failed
     if (!screenshotBuffer) {
-        await store.setValue('fullpageScreenshot.png', fullPageScreenshot, { contentType: 'image/png' });
-        // SENDING EMAIL WITH THE INFO ABOUT ERROR AND FULL PAGE SCREENSHOT
-        const errorMessage = `Cannot get screenshot (screenshot selector is probably wrong).`
-            + `\nMade screenshot of the full page instead: `
-            + `\nhttps://api.apify.com/v2/key-value-stores/${store.id}/records/fullpageScreenshot.png`;
-        if (informOnError === 'true') {
-            await sendMailOnError(sendNotificationTo, url, fullPageScreenshot, errorMessage);
-        }
+        await handleFailedAndThrow({
+            type: 'screenshot',
+            fullPageScreenshot,
+            informOnError,
+            sendNotificationTo,
+            url,
+        });
+    }
 
-        // We use simple string throw deliberately so users are not bothered with stack traces
-        throw errorMessage;
+    if (!content) {
+        await handleFailedAndThrow({
+            type: 'screenshot',
+            fullPageScreenshot,
+            informOnError,
+            sendNotificationTo,
+            url,
+        });
     }
 
     // We got the screenshot
     await store.setValue('currentScreenshot.png', screenshotBuffer, { contentType: 'image/png' });
-
-    // Store data
-    if (!content) {
-        const errorMessage = `Cannot get content (content selector is probably wrong).`
-            + `\nMade screenshot of the full page instead:\nhttps://api.apify.com/v2/key-value-stores/${store.id}/records/fullpageScreenshot.png`;
-        // MAKING AND SAVING FULL PAGE SCREENSHOT
-        await store.setValue('fullpageScreenshot.png', fullPageScreenshot, { contentType: 'image/png' });
-        // SENDING EMAIL WITH THE INFO ABOUT ERROR AND FULL PAGE SCREENSHOT
-        if (informOnError === 'true') {
-            await sendMailOnError(sendNotificationTo, url, fullPageScreenshot, errorMessage);
-        }
-        throw errorMessage;
-    }
 
     log.info(`Previous data: ${previousData}`);
     log.info(`Current data: ${content}`);
