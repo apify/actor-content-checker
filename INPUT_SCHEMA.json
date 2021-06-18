@@ -38,11 +38,12 @@
             "description": "Optional text to include in the email notification.",
             "editor": "textfield"
         },
+        
         "informOnError": {
             "title": "Email in case of error",
-            "type": "string",
+            "type": "boolean",
             "description": "In case of the problem with selectors on the page, you will get notification mail \n with the screenshot of the page attached.",
-            "editor": "select",
+            "editor": "checkbox",
             "default": "false",
             "enum": ["true", "false"],
             "enumTitles": ["Send", "Do not send"]
@@ -51,7 +52,7 @@
             "title": "Proxy Configuration",
             "type": "object",
             "default": {
-                "useApifyProxy": false
+                "useApifyProxy": true
             },
             "description": "Select a proxy if the target website is blocking your access.",
             "editor": "proxy"
