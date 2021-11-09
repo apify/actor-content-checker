@@ -1,84 +1,91 @@
 {
-    "title": "Content checker input",
-    "type": "object",
-    "schemaVersion": 1,
-    "required": ["url", "contentSelector", "sendNotificationTo"],
-    "properties": {
-        "url": {
-            "title": "URL to check",
-            "type": "string",
-            "description": "URL of a web page to be monitored",
-            "editor": "textfield",
-            "prefill": "https://www.apify.com/change-log"
+  "title": "Content checker input",
+  "type": "object",
+  "schemaVersion": 1,
+  "required": ["url", "contentSelector", "sendNotificationTo"],
+  "properties": {
+      "url": {
+          "title": "URL to check",
+          "type": "string",
+          "description": "URL of a web page to be monitored",
+          "editor": "textfield",
+          "prefill": "https://www.apify.com/change-log"
+      },
+      "contentSelector": {
+          "title": "Monitored area selector",
+          "type": "string",
+          "description": "CSS selector of an area you want to monitor",
+          "editor": "textfield",
+          "prefill": "[class^=change-log__MonthBox-]:nth-of-type(1) ul"
+      },
+      "screenshotSelector": {
+          "title": "Screenshot selector",
+          "type": "string",
+          "description": "CSS selector of a screenshot you want to get",
+          "editor": "textfield",
+          "prefill": "[class^=change-log__MonthBox-]:nth-of-type(1) ul"
+      },
+      "sendNotificationTo": {
+          "title": "Email address",
+          "type": "string",
+          "description": "Email address where you want to get the notification",
+          "editor": "textfield",
+          "prefill": "my.email@gmail.com"
+      },
+      "sendNotificationText": {
+          "title": "Notification Text",
+          "type": "string",
+          "description": "Optional text to include in the email notification.",
+          "editor": "textfield",
+          "prefill": "Hey there, the content has changed!"
+      },
+      "informOnError": {
+          "title": "Notify me in case of error",
+          "type": "string",
+          "description": "In case of the problem with selectors on the page, you will get notification mail \n with the screenshot of the page attached.",
+          "editor": "select",
+          "default": "false",
+          "enum": ["true", "false"],
+          "enumTitles": ["Send", "Do not send"]
+      },
+      "proxy": {
+          "title": "Proxy Configuration",
+          "type": "object",
+          "default": {
+              "useApifyProxy": true
+          },
+          "prefill": {
+            "useApifyProxy": true
         },
-        "contentSelector": {
-            "title": "Monitored area selector",
-            "type": "string",
-            "description": "CSS selector of an area you want to monitor",
-            "editor": "textfield",
-            "prefill": "[class^=change-log__MonthBox-]:nth-of-type(1) ul"
-        },
-        "screenshotSelector": {
-            "title": "Screenshot selector",
-            "type": "string",
-            "description": "CSS selector of a screenshot you want to get",
-            "editor": "textfield",
-            "prefill": "[class^=change-log__MonthBox-]:nth-of-type(1) ul"
-        },
-        "sendNotificationTo": {
-            "title": "Email address",
-            "type": "string",
-            "description": "Email address where you want to get the notification",
-            "editor": "textfield",
-            "example": "myemail@gmail.com"
-        },
-        "sendNotificationText": {
-            "title": "Notification Text",
-            "type": "string",
-            "description": "Optional text to include in the email notification.",
-            "editor": "textfield"
-        },
-        "informOnError": {
-            "title": "Email in case of error",
-            "type": "string",
-            "description": "In case of the problem with selectors on the page, you will get notification mail \n with the screenshot of the page attached.",
-            "editor": "select",
-            "default": "false",
-            "enum": ["true", "false"],
-            "enumTitles": ["Send", "Do not send"]
-        },
-        "proxy": {
-            "title": "Proxy Configuration",
-            "type": "object",
-            "default": {
-                "useApifyProxy": false
-            },
-            "description": "Select a proxy if the target website is blocking your access.",
-            "editor": "proxy"
-        },
-        "navigationTimeout": {
-            "title": "Navigation Timeout",
-            "description": "How long it should wait, in milliseconds, until the page times out",
-            "type": "integer",
-            "prefill": 30000,
-            "default": 30000,
-            "unit": "ms"
-        },
-        "retryStrategy": {
-            "title": "How to retry",
-            "type": "string",
-            "description": "Sometimes the page doesn't load properly or the actor gets blocked so retrying those helps. On the other hand retrying wrong selector doesn't help. The recognition of blocked pages is not perfect (about 80%).",
-            "editor": "select",
-            "default": "on-block",
-            "enum": ["on-block", "on-all-errors", "never-retry"],
-            "enumTitles": ["When being blocked", "For all errors", "Never"]
-        },
-        "maxRetries": {
-            "title": "Navigation Timeout",
-            "description": "How long it should wait, in milliseconds, until the page times out",
-            "type": "integer",
-            "default": 5,
-            "unit": "retries"
-        }
-    }
+          "description": "Select a proxy if the target website is blocking your access.",
+          "editor": "proxy",
+          "sectionCaption": "Proxy and browser configuration",
+          "sectionDescription": "Here you can specify further the behaviour of the scraper. However we worked hard to set the best options for you already."
+
+      },
+      "navigationTimeout": {
+          "title": "Navigation Timeout",
+          "description": "How long it should wait, in milliseconds, until the page times out",
+          "type": "integer",
+          "prefill": 30000,
+          "default": 30000,
+          "unit": "ms"
+      },
+      "retryStrategy": {
+          "title": "How to retry",
+          "type": "string",
+          "description": "Sometimes the page doesn't load properly or the actor gets blocked so retrying those helps. On the other hand retrying wrong selector doesn't help. The recognition of blocked pages is not perfect (about 80%).",
+          "editor": "select",
+          "default": "on-block",
+          "enum": ["on-block", "on-all-errors", "never-retry"],
+          "enumTitles": ["When being blocked", "For all errors", "Never"]
+      },
+      "maxRetries": {
+          "title": "Navigation Timeout",
+          "description": "How long it should wait, in milliseconds, until the page times out",
+          "type": "integer",
+          "default": 5,
+          "unit": "retries"
+      }
+  }
 }
