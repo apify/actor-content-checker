@@ -40,7 +40,7 @@
           "prefill": "Hey there, the content has changed!"
       },
       "informOnError": {
-          "title": "Notify me in case of error",
+          "title": "Notification in case of error",
           "type": "string",
           "description": "In case of the problem with selectors on the page, you will get notification mail \n with the screenshot of the page attached.",
           "editor": "select",
