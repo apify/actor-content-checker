@@ -29,15 +29,14 @@
           "title": "Email address",
           "type": "string",
           "description": "Email address where you want to get the notification",
-          "editor": "textfield",
-          "prefill": "my.email@gmail.com"
+          "editor": "textfield"
       },
       "sendNotificationText": {
           "title": "Notification Text",
           "type": "string",
           "description": "Optional text to include in the email notification.",
           "editor": "textfield",
-          "prefill": "Hey there, the content has changed!"
+          "prefill": "Apify found a new change!"
       },
       "informOnError": {
           "title": "Notification in case of error",
