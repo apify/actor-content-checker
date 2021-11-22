@@ -51,7 +51,7 @@
           "title": "Proxy Configuration",
           "type": "object",
           "prefill": {
-            "useApifyProxy": true
+            "useApifyProxy": false
         },
           "description": "Select a proxy if the target website is blocking your access.",
           "editor": "proxy",
