@@ -50,9 +50,6 @@
       "proxy": {
           "title": "Proxy Configuration",
           "type": "object",
-          "default": {
-              "useApifyProxy": true
-          },
           "prefill": {
             "useApifyProxy": true
         },
