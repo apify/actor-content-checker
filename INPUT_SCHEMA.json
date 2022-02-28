@@ -77,8 +77,8 @@
           "enumTitles": ["When being blocked", "For all errors", "Never"]
       },
       "maxRetries": {
-          "title": "Navigation Timeout",
-          "description": "How long it should wait, in milliseconds, until the page times out",
+          "title": "Maximum number of retries",
+          "description": "How many times the actor should retry in case of error.",
           "type": "integer",
           "default": 5,
           "unit": "retries"
