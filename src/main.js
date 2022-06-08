@@ -23,6 +23,7 @@ Apify.main(async () => {
         informOnError,
         maxRetries = 5,
         retryStrategy = 'on-block', // 'on-block', 'on-all-errors', 'never-retry'
+        reduceWhitespace = false
     } = input;
 
     // define name for a key-value store based on task ID or actor ID
@@ -96,6 +97,7 @@ Apify.main(async () => {
 
             try {
                 content = await page.$eval(contentSelector, (el) => el.textContent);
+                if (reduceWhitespace) content = content.replace(/\s+/g, " ")
             } catch (e) {
                 errorHappened = true;
                 errorMessage = `Failed to extract the content, either the content `

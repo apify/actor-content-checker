@@ -25,6 +25,11 @@
           "editor": "textfield",
           "prefill": "[class^=change-log__MonthBox-]:nth-of-type(1) ul"
       },
+      "reduceWhitespace": {
+        "title": "Reduce whitespace",
+        "description": "Replace whitespace characters with single space.",
+        "type": "boolean"
+      },
       "sendNotificationTo": {
           "title": "Email address",
           "type": "string",
